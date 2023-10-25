@@ -1,5 +1,7 @@
-﻿@model IEnumerable<TaskManager.Models.ProjectModel>
-
+﻿@using Microsoft.AspNetCore.Identity;
+@using TaskManager.Areas.Identity.Data;
+@model IEnumerable<TaskManager.Models.ProjectModel>
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,7 +9,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-route-id="@UserManager.GetUserName(User)" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -31,5 +33,6 @@
             </td>
         </tr>
 }
+   
     </tbody>
 </table>

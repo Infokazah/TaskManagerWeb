@@ -1,5 +1,7 @@
 ﻿@model TaskManager.Models.ProjectModel
-
+@using Microsoft.AspNetCore.Identity;
+@using TaskManager.Areas.Identity.Data;
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Create";
 }
@@ -12,7 +14,7 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CreatorName" value="@Model.CreatorName" />
+            <input type="hidden" asp-for="CreatorName" value="@UserManager.GetUserName(User)" />
             <div class="form-group">
                 <label asp-for="ProjectName" class="control-label"></label>
                 <input asp-for="ProjectName" class="form-control" />

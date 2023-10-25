@@ -41,20 +41,23 @@ namespace TaskManager.Controllers
         }
 
         // GET: ProjectModels/Create
-        public IActionResult Create(string CreatorNameCon)
+        public IActionResult Create()
         {
-            CreatorNameCon = "tester";
-            ProjectModel model = new ProjectModel()
-            {
-                CreatorName = CreatorNameCon
-            };
-            return View(model);
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProjectModel projectModel) 
         {
+            foreach(var item in _context.ProjectDb )
+            {
+                Console.WriteLine(item.CreatorName);
+                if(item.ProjectName == projectModel.ProjectName)
+                {
+                    return View();
+                }
+            }
             _context.Update(projectModel);
             await _context.SaveChangesAsync();
             return RedirectToAction("Create", "KategoriModels", projectModel);

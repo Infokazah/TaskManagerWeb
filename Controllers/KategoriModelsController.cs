@@ -58,7 +58,14 @@ namespace TaskManager.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(KategoriModel kategoriModel)
         {
-             _context.Add(kategoriModel);
+            foreach (var item in _context.KategoriDb)
+            {
+                if (item.KategoriName == kategoriModel.KategoriName)
+                {
+                    return View();
+                }
+            }
+            _context.Add(kategoriModel);
             await _context.SaveChangesAsync();
             return RedirectToAction("Create","TaskModels",kategoriModel);
         }
