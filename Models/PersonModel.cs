@@ -13,5 +13,6 @@ namespace TaskManager.Models
         public string PersonPassword { get; set; } 
 
         public List<ProjectModel> PersonProjects { get; set; }
+
     }
 }
