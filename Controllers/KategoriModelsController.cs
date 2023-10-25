@@ -52,20 +52,17 @@ namespace TaskManager.Controllers
             {
                 Projectid = projectModel.ProjectId
             };
-            return RedirectToAction("Create", "TaskModels", kategoriModel);
+            return View("Create", kategoriModel);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Create(KategoriModel kategoriModel)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(kategoriModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(kategoriModel);
+
+             _context.Add(kategoriModel);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Create","TasksModel",kategoriModel);
         }
 
         // GET: KategoriModels/Edit/5

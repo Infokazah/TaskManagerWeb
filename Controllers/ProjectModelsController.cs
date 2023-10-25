@@ -31,8 +31,7 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            var projectModel = await _context.ProjectDb
-                .FirstOrDefaultAsync(m => m.ProjectId == id);
+            var projectModel = await _context.ProjectDb.FirstOrDefaultAsync(m => m.ProjectId == id);
             if (projectModel == null)
             {
                 return NotFound();
@@ -54,8 +53,13 @@ namespace TaskManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProjectModel projectModel)
+        public async Task<IActionResult> Create(ProjectModel projectModel) //Добавление в БД
         {
+                if (_context.KategoriDb.FirstOrDefault(p => p.KategoriName == projectModel.CreatorName) != null)
+                {
+                    return RedirectToAction("Create", "KategoriModels", projectModel.CreatorName);
+                }
+            
             _context.Add(projectModel);
             await _context.SaveChangesAsync();
             return RedirectToAction("Create", "KategoriModels", projectModel);

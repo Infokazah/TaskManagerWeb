@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskManager.Models
 {
@@ -15,6 +16,7 @@ namespace TaskManager.Models
 
         public int TaskImportance { get; set; }
         public int KategoriId { get; set; }
+        [ForeignKey("KategoriId")]
         public KategoriModel TackKategori { get; set; }
     }
 }

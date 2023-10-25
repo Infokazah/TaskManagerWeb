@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskManager.Models
 {
@@ -12,6 +13,8 @@ namespace TaskManager.Models
         public int Projectid { get; set; }
 
         public List<TaskModel> KategoriTasks { get; set; }
+
+        [ForeignKey("Projectid")]
 
         public ProjectModel KategoriProject { get; set; }
     }
