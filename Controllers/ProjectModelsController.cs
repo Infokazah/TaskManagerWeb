@@ -53,14 +53,9 @@ namespace TaskManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProjectModel projectModel) //Добавление в БД
+        public async Task<IActionResult> Create(ProjectModel projectModel) 
         {
-                if (_context.KategoriDb.FirstOrDefault(p => p.KategoriName == projectModel.CreatorName) != null)
-                {
-                    return RedirectToAction("Create", "KategoriModels", projectModel.CreatorName);
-                }
-            
-            _context.Add(projectModel);
+            _context.Update(projectModel);
             await _context.SaveChangesAsync();
             return RedirectToAction("Create", "KategoriModels", projectModel);
         }

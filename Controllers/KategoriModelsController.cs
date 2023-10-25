@@ -56,13 +56,11 @@ namespace TaskManager.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> Create(KategoriModel kategoriModel)
         {
-
              _context.Add(kategoriModel);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Create","TasksModel",kategoriModel);
+            return RedirectToAction("Create","TaskModels",kategoriModel);
         }
 
         // GET: KategoriModels/Edit/5

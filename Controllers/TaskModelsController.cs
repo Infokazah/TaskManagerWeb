@@ -22,7 +22,7 @@ namespace TaskManager.Controllers
         // GET: TaskModels
         public IActionResult Index(int id)
         {
-            KategoriModel kategori = (KategoriModel)_context.KategoriDb.Include(o => o.KategoriId == id);
+            KategoriModel kategori = _context.KategoriDb.Include(o => o.KategoriId == id).FirstOrDefault(o => o.KategoriId == id); ;
             return View(kategori.KategoriTasks);
         }
 
@@ -49,22 +49,19 @@ namespace TaskManager.Controllers
             TaskModel task = new TaskModel
             {
                KategoriId = kategori.KategoriId,
+               TackKategori = kategori
             };
             return View(task);
         }
 
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TaskModel taskModel)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(taskModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(taskModel);
+            _context.Add(taskModel);
+            await _context.SaveChangesAsync();
+            KategoriModel kat = _context.KategoriDb.FirstOrDefault(o => o.KategoriId == taskModel.KategoriId);
+            return RedirectToAction("Create","TaskModels",kat);
         }
 
         // GET: TaskModels/Edit/5
