@@ -1,0 +1,30 @@
+﻿@model MessengerModel
+<div style="width: 100%">
+	<div class="center-container font-style">
+		<div>
+			<div class="row">
+				<div class="col-12 text-center" style="opacity: 0.6">
+					<h2 class="text-black py-2">Оставьте комментарий</h2>
+				</div>
+			</div>
+		</div>
+		<div class="join_form-container p-1">
+			<form asp-action="Send">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div class="border p-3 mt-4" style="border-radius: 15px; display: flex; align-items: center; flex-direction: column">
+					<div class="form-floating mb-3" style="width: 100%">
+						<input asp-for="Messenge" class="form-control border" />
+						<label asp-for="Messenge" class="ms-2" style="opacity:0.4">Комментарий</label>
+						<span asp-validation-for="Messenge" class="text-danger"></span>
+					</div>
+
+					<div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 30px">
+						<input type="hidden" asp-for="TaskModelid" value="@ViewBag.Id" class="form-control" />
+						<button type="submit" class="btn btn-primary transparent-button shiny-button-join" style="width: 100%">Оставить комментарий</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+

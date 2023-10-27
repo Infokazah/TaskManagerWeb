@@ -4,34 +4,34 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>KategoriModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="KategoriId" />
-            <div class="form-group">
-                <label asp-for="KategoriName" class="control-label"></label>
-                <input asp-for="KategoriName" class="form-control" />
-                <span asp-validation-for="KategoriName" class="text-danger"></span>
+<div class="center-container font-style" style="margin: 100px 0 0 0">
+    <div class="">
+        <div class="row">
+            <div class="col-12 text-center" style="opacity: 0.6">
+                <h2 class="text-black py-2">Edit</h2>
             </div>
-            <div class="form-group">
-                <label asp-for="Projectid" class="control-label"></label>
-                <input asp-for="Projectid" class="form-control" />
-                <span asp-validation-for="Projectid" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="join_form-container p-1">
+        <form asp-action="Редактирование">
+            <div class="border p-3 mt-4" style="border-radius: 15px; display: flex; align-items: center; flex-direction: column">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="KategoriId" value="@Model.KategoriId" />
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="KategoriName" class="form-control border" />
+                    <label asp-for="KategoriName" class="ms-2" style="opacity:0.4">Название</label>
+                    <span asp-validation-for="KategoriName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Projectid" value="@Model.Projectid" class="form-control" />
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 30px">
+                    <input type="submit" value="Сохранить" class="btn btn-primary transparent-button shiny-button-join" style="width: 49%" />
+                    <a asp-action="Index" class="btn btn-outline-primary transparent-button shiny-button2-join" style="width: 49%">Вернуться к списку</a>
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

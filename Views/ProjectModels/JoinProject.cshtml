@@ -1,0 +1,40 @@
+﻿@model JoinViewModel
+@{
+    ViewData["Title"] = "JoinProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="center-container font-style" style="margin: 100px 0 0 0">
+    <div class="">
+        <div class="row">
+            <div class="col-12 text-center" style="opacity: 0.6">
+                <h2 class="text-black py-2">Join Project</h2>
+            </div>
+        </div>
+    </div>
+    <div class="join_form-container p-1">
+        <form method="post" asp-action="JoinProjectUpload">
+            <div class="border p-3 mt-4" style="border-radius: 15px; display: flex; align-items: center; flex-direction: column">
+
+                @*<div asp-validation-summary="All"></div>*@
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="ProjectNameJoin" class="form-control border" />
+                    <label asp-for="ProjectNameJoin" class="ms-2" style="opacity:0.4">Название</label>
+                    <span asp-validation-for="ProjectNameJoin" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="PersonPasswordJoin" class="form-control border" />
+                    <label asp-for="PersonPasswordJoin" class="ms-2" style="opacity:0.4">Пароль</label>
+                    <span asp-validation-for="PersonPasswordJoin" class="text-danger"></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 30px">
+                    <input type="hidden" asp-for="PersonNameJoin" value="@Model.PersonNameJoin" />
+                    <button type="submit" class="btn btn-primary transparent-button shiny-button-join" style="width: 49%">Join</button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary transparent-button shiny-button2-join" style="width: 49%">Вернуться</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

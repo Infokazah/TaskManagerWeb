@@ -58,6 +58,28 @@ namespace TaskManager.Migrations
                     b.ToTable("KategoriDb");
                 });
 
+            modelBuilder.Entity("TaskManager.Models.MessengerModel", b =>
+                {
+                    b.Property<int>("MessengerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessengerId"));
+
+                    b.Property<string>("Messenge")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TaskModelid")
+                        .HasColumnType("int");
+
+                    b.HasKey("MessengerId");
+
+                    b.HasIndex("TaskModelid");
+
+                    b.ToTable("TaskMessengerDb");
+                });
+
             modelBuilder.Entity("TaskManager.Models.PersonModel", b =>
                 {
                     b.Property<int>("PersonId")
@@ -108,6 +130,40 @@ namespace TaskManager.Migrations
                     b.ToTable("ProjectDb");
                 });
 
+            modelBuilder.Entity("TaskManager.Models.TaskForm", b =>
+                {
+                    b.Property<int>("TaskFormId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskFormId"));
+
+                    b.Property<string>("TaskFormData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskFormDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskFormName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskFormPersonName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TaskModelFormId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskFormId");
+
+                    b.HasIndex("TaskModelFormId");
+
+                    b.ToTable("TaskFormDb");
+                });
+
             modelBuilder.Entity("TaskManager.Models.TaskModel", b =>
                 {
                     b.Property<int>("TaskId")
@@ -120,6 +176,10 @@ namespace TaskManager.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TaskDeadline")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskDiscription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -167,6 +227,28 @@ namespace TaskManager.Migrations
                     b.Navigation("KategoriProject");
                 });
 
+            modelBuilder.Entity("TaskManager.Models.MessengerModel", b =>
+                {
+                    b.HasOne("TaskManager.Models.TaskModel", "MessengerTaskModel")
+                        .WithMany("MessengerList")
+                        .HasForeignKey("TaskModelid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MessengerTaskModel");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.TaskForm", b =>
+                {
+                    b.HasOne("TaskManager.Models.TaskModel", "TaskModelForm")
+                        .WithMany()
+                        .HasForeignKey("TaskModelFormId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TaskModelForm");
+                });
+
             modelBuilder.Entity("TaskManager.Models.TaskModel", b =>
                 {
                     b.HasOne("TaskManager.Models.KategoriModel", "TackKategori")
@@ -186,6 +268,11 @@ namespace TaskManager.Migrations
             modelBuilder.Entity("TaskManager.Models.ProjectModel", b =>
                 {
                     b.Navigation("ProjectKategories");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.TaskModel", b =>
+                {
+                    b.Navigation("MessengerList");
                 });
 #pragma warning restore 612, 618
         }

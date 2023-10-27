@@ -1,0 +1,31 @@
+﻿@model List<MessengerModel>
+
+@{
+    await Html.RenderPartialAsync("MessengerPartial", new MessengerModel());
+}
+
+<div class="messenge-container">
+    <h1>Комментарии</h1>
+    @try
+    {
+    @if (Model.Any())
+    {
+         foreach (var item in Model)
+        {
+            <div class="messenge-block border">
+				<p>@item.Messenge</p>
+				<br />
+            </div>
+            
+        }
+    }
+    }
+    catch
+    {
+        <h1>Пока-что комментариев нет</h1>
+    }
+</div>
+
+
+
+

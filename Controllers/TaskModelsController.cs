@@ -19,14 +19,62 @@ namespace TaskManager.Controllers
             _context = context;
         }
 
-        // GET: TaskModels
-        public IActionResult Index(int id)
+        public IActionResult Forme(int id)
         {
-            KategoriModel kategori = _context.KategoriDb.Include(o => o.KategoriId == id).FirstOrDefault(o => o.KategoriId == id); ;
-            return View(kategori.KategoriTasks);
+            var model = _context.TaskDb.FirstOrDefault(o => o.TaskId == id);
+            TaskForm form = new TaskForm
+            { 
+                TaskModelFormId = model.TaskId,
+                TaskModelForm = model,
+            }; 
+            return View(form);
+        }
+        public async Task<IActionResult> FormSafe(TaskForm form)
+        {
+            _context.TaskFormDb.Add(form);
+            await _context.SaveChangesAsync();
+
+            var taskModel = _context.TaskDb.FirstOrDefault(o => o.TaskId == form.TaskModelFormId);
+            var kategoriModel = _context.KategoriDb.FirstOrDefault(o => o.KategoriId == taskModel.KategoriId);
+
+            return RedirectToAction("Index", kategoriModel);
+        }
+        // GET: TaskModels
+        public async Task<IActionResult> Index(int? id, KategoriModel model)
+        {
+            Console.WriteLine(id);
+
+            if (id == null)
+            {
+                model = await _context.KategoriDb.Include(t => t.KategoriTasks)
+                    .FirstOrDefaultAsync(o => o.KategoriName == model.KategoriName);
+
+                if (model == null)
+                {
+                    // Handle the case where the model is not found
+                    return NotFound();
+                }
+
+                id = model.KategoriId;
+            }
+
+            var projectModel = await _context.KategoriDb.Include(t => t.KategoriTasks)
+                .FirstOrDefaultAsync(o => o.KategoriId == id);
+
+            if (projectModel == null)
+            {
+                // Handle the case where projectModel is not found
+                return NotFound();
+            }
+
+            // Sort KategoriTasks in descending order by TaskStatus
+            projectModel.KategoriTasks = projectModel.KategoriTasks.OrderByDescending(task => task.TaskImportance).ToList();
+
+            return View(projectModel.KategoriTasks);
         }
 
-        // GET: TaskModels/Details/5
+
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.TaskDb == null)
@@ -44,24 +92,36 @@ namespace TaskManager.Controllers
             return View(taskModel);
         }
 
-        public IActionResult Create(KategoriModel kategori)
+        public IActionResult Create(int id, KategoriModel kategori)
         {
-            TaskModel task = new TaskModel
+            TaskModel kategoriModel;
+            if (id != 0)
             {
-               KategoriId = kategori.KategoriId,
-               TackKategori = kategori
-            };
-            return View(task);
+                kategoriModel = new TaskModel();
+                {
+                    kategoriModel.KategoriId = id;
+                }
+            }
+            else
+            {
+                kategoriModel = new TaskModel();
+                {
+                    kategoriModel.KategoriId = kategori.KategoriId;
+                    kategoriModel.TackKategori = kategori;
+                }
+            }
+            return View(kategoriModel);
         }
 
-        
+
         [HttpPost]
-        public async Task<IActionResult> Create(TaskModel taskModel)
+        public async Task<IActionResult> CreateUpload(TaskModel taskModel)
         {
             _context.Add(taskModel);
             await _context.SaveChangesAsync();
             KategoriModel kat = _context.KategoriDb.FirstOrDefault(o => o.KategoriId == taskModel.KategoriId);
-            return RedirectToAction("Create","TaskModels",kat);
+            var kategoriId = taskModel.KategoriId;
+            return RedirectToAction("Index", new { id = kategoriId });
         }
 
         // GET: TaskModels/Edit/5
@@ -80,40 +140,40 @@ namespace TaskManager.Controllers
             return View(taskModel);
         }
 
-        // POST: TaskModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TaskId,TaskName,TaskDeadline,TaskStatus,TaskImportance,KategoriId")] TaskModel taskModel)
+        public async Task<IActionResult> Edit(int id, TaskModel taskModel)
         {
             if (id != taskModel.TaskId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(taskModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TaskModelExists(taskModel.TaskId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(taskModel);
+                await _context.SaveChangesAsync();
             }
-            return View(taskModel);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TaskModelExists(taskModel.TaskId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            // Get the KategoriId associated with the edited task
+            var kategoriId = taskModel.KategoriId;
+
+            // Redirect to the Index action with the id as a route parameter
+            return RedirectToAction("Index", new { id = kategoriId });
         }
+
+
 
         // GET: TaskModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -123,8 +183,7 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            var taskModel = await _context.TaskDb
-                .FirstOrDefaultAsync(m => m.TaskId == id);
+            var taskModel = await _context.TaskDb.FindAsync(id);
             if (taskModel == null)
             {
                 return NotFound();
@@ -133,28 +192,53 @@ namespace TaskManager.Controllers
             return View(taskModel);
         }
 
-        // POST: TaskModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(TaskModel taskModel)
         {
             if (_context.TaskDb == null)
             {
-                return Problem("Entity set 'TaskManagerDbContext.TaskDb'  is null.");
+                return Problem("Entity set 'TaskManagerDbContext.TaskDb' is null.");
             }
-            var taskModel = await _context.TaskDb.FindAsync(id);
-            if (taskModel != null)
+
+            var id = taskModel.TaskId;
+            var taskToDelete = await _context.TaskDb.FindAsync(id);
+
+            if (taskToDelete == null)
             {
-                _context.TaskDb.Remove(taskModel);
+                return NotFound();
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            // Access the Confirmation field
+
+
+            // Check the confirmation and proceed with deletion if it matches a predefined value
+
+            try
+            {
+                int kategoriIdToDelete = taskToDelete.KategoriId;
+                var tasksWithSameKategoriId = await _context.TaskDb
+                    .Where(t => t.KategoriId == kategoriIdToDelete)
+                    .ToListAsync();
+
+                _context.TaskDb.Remove(taskToDelete);
+                await _context.SaveChangesAsync();
+
+                // Redirect to the Index action with the id as a route parameter
+                return RedirectToAction("Index", new { id = kategoriIdToDelete });
+            }
+            catch (Exception ex)
+            {
+                return Problem("Error occurred while deleting the task: " + ex.Message);
+            }
+
+
         }
+
 
         private bool TaskModelExists(int id)
         {
-          return (_context.TaskDb?.Any(e => e.TaskId == id)).GetValueOrDefault();
+            return (_context.TaskDb?.Any(e => e.TaskId == id)).GetValueOrDefault();
         }
     }
 }

@@ -1,0 +1,53 @@
+﻿@model TaskManager.Models.TaskForm
+
+
+
+<div class="center-container font-style" style="margin: 100px 0 0 0">
+    <div class="">
+        <div class="row">
+            <div class="col-12 text-center" style="opacity: 0.6">
+                <h2 class="text-black py-2">Edit</h2>
+            </div>
+        </div>
+    </div>
+    <div class="join_form-container p-1">
+        <form asp-action="FormSafe">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="border p-3 mt-4" style="border-radius: 15px; display: flex; align-items: center; flex-direction: column">
+            <input type="hidden" asp-for="TaskFormId" />
+            <input type="hidden" asp-for="TaskModelFormId" class="form-control" />
+
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskFormName" class="form-control border" />
+                    <label asp-for="TaskFormName" class="ms-2" style="opacity:0.4">Название</label>
+                    <span asp-validation-for="TaskFormName" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskFormDescription" class="form-control border" />
+                    <label asp-for="TaskFormDescription" class="ms-2" style="opacity:0.4">Описание</label>
+                    <span asp-validation-for="TaskFormDescription" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskFormData" class="form-control border" />
+                    <label asp-for="TaskFormData" class="ms-2" style="opacity:0.4">Дата выполнения</label>
+                    <span asp-validation-for="TaskFormData" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskFormPersonName" class="form-control border" />
+                    <label asp-for="TaskFormPersonName" class="ms-2" style="opacity:0.4">Исполнитель</label>
+                    <span asp-validation-for="TaskFormPersonName" class="text-danger"></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 30px">
+                    <input type="submit" value="Создать" class="btn btn-primary transparent-button shiny-button-join" style="width: 100%" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

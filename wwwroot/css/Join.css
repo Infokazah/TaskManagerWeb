@@ -1,0 +1,35 @@
+﻿body {
+}
+
+.shiny-button-join {
+    background-image: linear-gradient(45deg, #f5e4b7, #BEADA1); /* Градиентный фон */
+    color: #F5F5F5; /* Цвет текста */
+    border: none; /* Убираем границу кнопки */
+    cursor: pointer; /* Изменяем курсор при наведении */
+    background-size: 100% 100%; /* Размер градиента */
+}
+
+.shiny-button2-join {
+    background-image: linear-gradient(-45deg, #f5e4b7, #BEADA1); /* Градиентный фон */
+    color: #F7F7F7; /* Цвет текста */
+    border: none; /* Убираем границу кнопки */
+    cursor: pointer; /* Изменяем курсор при наведении */
+    background-size: 100% 100%; /* Размер градиента */
+}
+
+.join_form-container {
+    width: 25%;
+}
+
+@media(max-width: 1200px)
+{
+    .join_form-container {
+        width: 45%;
+    }
+}
+
+@media(max-width: 768px) {
+    .join_form-container {
+        width: 85%;
+    }
+}

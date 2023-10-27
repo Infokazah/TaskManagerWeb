@@ -4,47 +4,56 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>TaskModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TaskName" class="control-label"></label>
-                <input asp-for="TaskName" class="form-control" />
-                <span asp-validation-for="TaskName" class="text-danger"></span>
+<div class="center-container font-style" style="margin: 100px 0 0 0">
+    <div class="">
+        <div class="row">
+            <div class="col-12 text-center" style="opacity: 0.6">
+                <h2 class="text-black py-2">Новая задача</h2>
             </div>
-            <div class="form-group">
-                <label asp-for="TaskDeadline" class="control-label"></label>
-                <input asp-for="TaskDeadline" class="form-control" />
-                <span asp-validation-for="TaskDeadline" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TaskStatus" class="control-label"></label>
-                <input asp-for="TaskStatus" class="form-control" />
-                <span asp-validation-for="TaskStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TaskImportance" class="control-label"></label>
-                <input asp-for="TaskImportance" class="form-control" />
-                <span asp-validation-for="TaskImportance" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="KategoriId" value="@Model.KategoriId" class="form-control" />
-            <input type="hidden" asp-for="TackKategori" value="@Model.TackKategori" class="form-control" />
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="join_form-container p-1">
+        <form asp-action="CreateUpload">
+            <div class="border p-3 mt-4" style="border-radius: 15px; display: flex; align-items: center; flex-direction: column">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskName" class="form-control border" />
+                    <label asp-for="TaskName" class="ms-2" style="opacity:0.4">Имя</label>
+                    <span asp-validation-for="TaskName" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskDeadline" class="form-control border" />
+                    <label asp-for="TaskDeadline" class="ms-2" style="opacity:0.4">Срок сдачи</label>
+                    <span asp-validation-for="TaskDeadline" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskStatus" class="form-control border" />
+                    <label asp-for="TaskStatus" class="ms-2" style="opacity:0.4">Статус</label>
+                    <span asp-validation-for="TaskStatus" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskDiscription" class="form-control border" />
+                    <label asp-for="TaskDiscription" class="ms-2" style="opacity:0.4">Описание</label>
+                    <span asp-validation-for="TaskDiscription" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3" style="width: 100%">
+                    <input asp-for="TaskImportance" class="form-control border" />
+                    <label asp-for="TaskImportance" class="ms-2" style="opacity:0.4">Важность</label>
+                    <span asp-validation-for="TaskImportance" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="KategoriId" value="@Model.KategoriId" class="form-control" />
+                    <input type="hidden" asp-for="TackKategori" value="@Model.TackKategori" class="form-control" />
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 30px">
+                    <input type="submit" value="Создать" class="btn btn-primary transparent-button shiny-button-join" style="width: 49%" />
+                    @*<button type="submit" class="btn btn-primary transparent-button shiny-button-join" style="width: 49%">Join</button>*@
+                    <a asp-action="Index" asp-route-id="@Model.KategoriId" class="btn btn-outline-primary transparent-button shiny-button2-join" style="width: 49%">Вернуться назад</a>
+                </div>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-<h1>@Model.KategoriId</h1>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
