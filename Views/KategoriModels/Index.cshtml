@@ -1,41 +1,85 @@
-﻿@model IEnumerable<TaskManager.Models.KategoriModel>
+﻿@*@model List<TaskManager.Models.KategoriModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>Просмотр категорий</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-controller="KategoriModels" asp-route-id="@Model[0].Projectid">Создать новую</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.KategoriName)
+
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projectid)
+
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.KategoriName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Projectid)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.KategoriId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.KategoriId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.KategoriId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KategoriName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.KategoriId">Edit</a> |
+                    <a asp-action="Index" asp-controller="TaskModels" asp-route-id="@item.KategoriId">просмтореть категарию</a> |
+                    <a asp-action="Delete" asp-route-id="@item.KategoriId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
-</table>
+</table>*@
+
+@model List<TaskManager.Models.KategoriModel>
+
+@{
+
+    ViewData["Title"] = "Index";
+}
+
+<div class="projects-container">
+    <div>
+        <div class="start-50 font-style font-normal" style="text-align: center; opacity: 0.7; margin: 20px 0 20px 0;">
+            <h1>Просмотр категорий</h1>
+        </div>
+        <div>
+            <table class="table border" style="background-color: #fff;">
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <div>
+                        <tr>
+                            <td style="vertical-align: middle;">
+                                    @Html.DisplayFor(modelItem => item.KategoriName)
+                            </td>
+                            <td class="d-flex justify-content-end">
+                                <div style="">
+                                    <a type="button" class="btn btn-primary transparent-button shiny-button" style="padding: 5px 50px;" asp-action="Edit" asp-route-id="@item.KategoriId">Edit</a>
+                                    <a type="button" class="btn btn-primary transparent-button shiny-button shiny-button_color-reverse" style="padding: 5px 50px;" asp-action="Index" asp-controller="TaskModels" asp-route-id="@item.KategoriId">Details</a>
+                                    <a type="button" class="btn btn-primary transparent-button shiny-button" style="padding: 5px 50px;" asp-action="Delete" asp-route-id="@item.KategoriId">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+            </div>
+                    }
+        </tbody>
+        </table>
+    </div>
+
+    <div class='light-z light x1'></div>
+    <div class='light-z light x2'></div>
+    <div class='light-z light x3'></div>
+    <div class='light-z light x4'></div>
+    <div class='light-z light x5'></div>
+    <div class='light-z light x6'></div>
+    <div class='light-z light x7'></div>
+    <div class='light-z light x8'></div>
+    <div class='light-z light x9'></div>
+</div>

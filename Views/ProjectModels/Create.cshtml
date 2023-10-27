@@ -6,11 +6,11 @@
 
 <h1>Create</h1>
 
-<h4>ProjectModel</h4>
+<h4>@Model.CreatorName</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateProject">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CreatorName" value="@Model.CreatorName" />
             <div class="form-group">
@@ -35,5 +35,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Data;
 using TaskManager.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TaskManager.Controllers
 {
@@ -19,16 +20,17 @@ namespace TaskManager.Controllers
             _context = context;
         }
 
-        // GET: KategoriModels
-        public IActionResult Index(int id)
+        public async Task<IActionResult> Index(int? id, ProjectModel model)
         {
-
-              ProjectModel project = _context.ProjectDb.Include(t => t.ProjectKategories).FirstOrDefault(o => o.ProjectId == id);
-
-            return View(project.ProjectKategories);
+            if (id == null)
+            {
+                model = await _context.ProjectDb.Include(t => t.ProjectKategories).FirstOrDefaultAsync(o => o.ProjectName == model.ProjectName);
+                id = model.ProjectId;
+            }
+            var projectModel = await _context.ProjectDb.Include(t => t.ProjectKategories).FirstOrDefaultAsync(o => o.ProjectId == id);
+            return View(projectModel.ProjectKategories);
         }
 
-        // GET: KategoriModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.KategoriDb == null)
@@ -46,21 +48,41 @@ namespace TaskManager.Controllers
             return View(kategoriModel);
         }
 
-        public IActionResult Create(ProjectModel projectModel)
+        public IActionResult Create(int id, ProjectModel projectModel)
         {
-            KategoriModel kategoriModel = new KategoriModel()
+            KategoriModel kategoriModel;
+            if (id != 0)
             {
-                Projectid = projectModel.ProjectId
-            };
-            return View("Create", kategoriModel);
+                kategoriModel = new KategoriModel();
+                {
+                    kategoriModel.Projectid = id;
+                }
+            }
+            else
+            {
+                kategoriModel = new KategoriModel();
+                {
+                    kategoriModel.KategoriProject = projectModel;
+                    kategoriModel.Projectid = projectModel.ProjectId;
+                }
+            }
+            return View(kategoriModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(KategoriModel kategoriModel)
+        public async Task<IActionResult> CreateUpload(KategoriModel kategoriModel)
         {
-             _context.Add(kategoriModel);
+            foreach (var item in _context.KategoriDb)
+            {
+                if (item.KategoriName == kategoriModel.KategoriName)
+                {
+                    return View(kategoriModel);
+                }
+            }
+            
+            _context.Add(kategoriModel);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Create","TaskModels",kategoriModel);
+            return RedirectToAction("Create", "TaskModels", kategoriModel);
         }
 
         // GET: KategoriModels/Edit/5
@@ -79,39 +101,27 @@ namespace TaskManager.Controllers
             return View(kategoriModel);
         }
 
-        // POST: KategoriModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("KategoriId,KategoriName,Projectid")] KategoriModel kategoriModel)
+        public async Task<IActionResult> Edit(int id, KategoriModel kategoriModel)
         {
-            if (id != kategoriModel.KategoriId)
+            var KategoriModel = _context.KategoriDb.FirstOrDefault(q => q.KategoriId == kategoriModel.KategoriId);
+
+            if (KategoriModel != null)
             {
-                return NotFound();
+                KategoriModel.KategoriId = kategoriModel.KategoriId;
+                KategoriModel.KategoriProject = kategoriModel.KategoriProject;
+                KategoriModel.KategoriName = kategoriModel.KategoriName;
+                KategoriModel.KategoriTasks = kategoriModel.KategoriTasks;
+                KategoriModel.Projectid = kategoriModel.Projectid;
+
+                _context.KategoriDb.Update(KategoriModel);
+                await _context.SaveChangesAsync();
+                Console.WriteLine("success");
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(kategoriModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!KategoriModelExists(kategoriModel.KategoriId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(kategoriModel);
+            ProjectModel project = _context.ProjectDb.FirstOrDefault(o => o.ProjectId == KategoriModel.Projectid);
+            return RedirectToAction("Index","KategoriModels",project);
         }
 
         // GET: KategoriModels/Delete/5
@@ -142,18 +152,19 @@ namespace TaskManager.Controllers
                 return Problem("Entity set 'TaskManagerDbContext.KategoriDb'  is null.");
             }
             var kategoriModel = await _context.KategoriDb.FindAsync(id);
+            var projectModel = _context.ProjectDb.FirstOrDefault(o => o.ProjectId == kategoriModel.Projectid);
             if (kategoriModel != null)
             {
                 _context.KategoriDb.Remove(kategoriModel);
             }
-            
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index","KategoriModels", projectModel);
         }
 
         private bool KategoriModelExists(int id)
         {
-          return (_context.KategoriDb?.Any(e => e.KategoriId == id)).GetValueOrDefault();
+            return (_context.KategoriDb?.Any(e => e.KategoriId == id)).GetValueOrDefault();
         }
     }
 }

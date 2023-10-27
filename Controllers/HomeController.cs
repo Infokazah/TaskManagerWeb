@@ -13,9 +13,13 @@ namespace TaskManager.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(PersonModel person)
         {
-            return View();
+            if (string.IsNullOrEmpty(person.PersonName)) 
+            {
+                person.PersonName = "unregistered";
+            }
+            return View("Index", person);
         }
 
         public IActionResult Privacy()

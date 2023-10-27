@@ -1,0 +1,45 @@
+﻿body {
+}
+
+.center-container {
+    display: flex;
+    justify-content: center; /* Горизонтальное выравнивание по центру */
+    align-items: center; /* Вертикальное выравнивание по центру */
+    flex-direction: column;
+}
+
+.faded-border {
+    background: linear-gradient(90deg, transparent, #000, transparent); /* Горизонтальная полоса затухания */
+    padding: 10px; /* Регулируйте отступ по вашему усмотрению */
+    color: #fff; /* Цвет текста внутри полоски */
+}
+
+.body-container-create {
+    height: 100%;
+    margin: 0;
+}
+
+.bg {
+    animation: slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #E6E6DF, rgba(255,255,255,.8));
+    bottom: 0;
+    left: -50%;
+    position: fixed;
+    right: -50%;
+    top: 0;
+    z-index: -1;
+    transform: rotate(45deg);
+}
+
+.content {
+    background-color: rgba(255,255,255,.8);
+    border-radius: .25em;
+    box-shadow: 0 0 .25em rgba(0,0,0,.25);
+    box-sizing: border-box;
+    left: 50%;
+    padding: 10vmin;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}

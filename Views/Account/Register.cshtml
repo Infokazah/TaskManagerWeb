@@ -1,0 +1,82 @@
+﻿@*@model PersonModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class = "card shadow border-0 mt-4">
+    <div class = "card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class ="col-12 text-center">
+                <h2 class = "text-white py-2">Register</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method = "post" asp-action="Register">
+    <div class = "border p-3 mt-4">
+
+        
+        <div class = "mb-3">
+            <label asp-for= "PersonName"></label>
+            <input asp-for = "PersonName" class = "form-control"></input>
+            <span asp-validation-for="PersonName" class="text-danger"></span>
+        </div>
+        <div class = "mb-3">
+            <label asp-for= "PersonPassword"></label>
+            <input asp-for= "PersonPassword" class = "form-control"></input>
+             <span asp-validation-for="PersonPassword" class="text-danger"></span>
+        </div>
+         <div class = "mb-3">
+            <label asp-for= "PersonMailAddress"></label>
+            <input asp-for= "PersonMailAddress" class = "form-control"></input>
+             <span asp-validation-for="PersonMailAddress" class="text-danger"></span>
+        </div>
+        <button type = "submit" class = "btn btn-primary" style ="width:150px">Update</button>
+        <a asp-controller = "Home" asp-action="Index" class = "btn btn-primary" style = "width:150px"> Back </a>
+    </div>
+</form>
+    </div>
+</div>
+
+*@
+
+@model PersonModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="login-container" style="text-align: center">
+    <h2>Create your own account.</h2>
+    <div class="row">
+        <div class="login-col">
+            <section class="login-section  border" style="padding: 20px; border: 3px; border-radius: 30px">
+                <form method = "post" asp-action="Register" style="display: flex; flex-direction: column; align-items: center">
+                    <div class="login-form_item form-floating">
+                        <input asp-for="PersonName" class="form-control" autocomplete="username" aria-required="true" />
+                        <label asp-for="PersonName" class="form-label"></label>
+                        <span asp-validation-for="PersonName" class="text-danger"></span>
+                    </div>
+                    <div class="login-form_item form-floating">
+                        <input asp-for="PersonPassword" class="form-control" autocomplete="current-password" aria-required="true" />
+                        <label asp-for="PersonPassword" class="form-label"></label>
+                        <span asp-validation-for="PersonPassword" class="text-danger"></span>
+                    </div>
+                    <div class="login-form_item form-floating">
+                        <input asp-for="PersonMailAddress" class="form-control" autocomplete="current-password" aria-required="true" />
+                        <label asp-for= "PersonMailAddress" class="form-label"></label>
+                        <span asp-validation-for="PersonMailAddress" class="text-danger"></span>
+                    </div>
+                    <div class="login-btn" style="margin-top: 60px">
+                        <button type="submit" class="w-100 btn btn-lg btn-primary" style="background-image: linear-gradient(45deg, #f5e4b7, #dfd3c3); border: none">Sing up</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+}

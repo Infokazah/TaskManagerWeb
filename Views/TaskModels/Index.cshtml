@@ -1,59 +1,47 @@
-﻿@model IEnumerable<TaskManager.Models.TaskModel>
+﻿@model List<TaskManager.Models.TaskModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Просмотр Задач</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-controller="TaskModels" asp-route-id="@Model[0].KategoriId">Создать задачу</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TaskName)
+
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TaskDeadline)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TaskStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TaskImportance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.KategoriId)
+
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaskName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaskDeadline)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaskStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaskImportance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KategoriId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TaskId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TaskId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TaskId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    Название: @Html.DisplayFor(modelItem => item.TaskName)
+                </td>
+                <td>
+                    Дедлайн: @Html.DisplayFor(modelItem => item.TaskDeadline)
+                </td>
+                <td>
+                    Статус: @Html.DisplayFor(modelItem => item.TaskStatus)
+                </td>
+                <td>
+                    Приоритет: @Html.DisplayFor(modelItem => item.TaskImportance)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.TaskId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.TaskId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

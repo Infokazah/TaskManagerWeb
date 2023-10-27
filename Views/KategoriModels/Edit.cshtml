@@ -12,17 +12,14 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="KategoriId" />
+            <input type="hidden" asp-for="KategoriId" value="@Model.KategoriId" />
             <div class="form-group">
                 <label asp-for="KategoriName" class="control-label"></label>
                 <input asp-for="KategoriName" class="form-control" />
                 <span asp-validation-for="KategoriName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Projectid" class="control-label"></label>
-                <input asp-for="Projectid" class="form-control" />
-                <span asp-validation-for="Projectid" class="text-danger"></span>
-            </div>
+
+            <input type="hidden" asp-for="Projectid" value="@Model.Projectid" class="form-control" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

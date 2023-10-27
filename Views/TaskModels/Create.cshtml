@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateUpload">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TaskName" class="control-label"></label>
@@ -44,7 +44,6 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-<h1>@Model.KategoriId</h1>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

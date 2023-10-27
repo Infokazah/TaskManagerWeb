@@ -20,13 +20,18 @@ namespace TaskManager.Controllers
         }
 
         // GET: TaskModels
-        public IActionResult Index(int id)
+        public IActionResult Index(int? id, KategoriModel model)
         {
-            KategoriModel kategori = _context.KategoriDb.Include(o => o.KategoriId == id).FirstOrDefault(o => o.KategoriId == id); ;
-            return View(kategori.KategoriTasks);
+            Console.WriteLine(id);
+            if (id == null)
+            {
+                model = _context.KategoriDb.Include(t => t.KategoriTasks).FirstOrDefault(o => o.KategoriName == model.KategoriName);
+                id = model.KategoriId;
+            }
+            var projectModel = _context.KategoriDb.Include(t => t.KategoriTasks).FirstOrDefault(o => o.KategoriId == id);
+            return View(projectModel.KategoriTasks);
         }
 
-        // GET: TaskModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.TaskDb == null)
@@ -44,19 +49,30 @@ namespace TaskManager.Controllers
             return View(taskModel);
         }
 
-        public IActionResult Create(KategoriModel kategori)
+        public IActionResult Create(int id,KategoriModel kategori)
         {
-            TaskModel task = new TaskModel
+            TaskModel kategoriModel;
+            if (id != 0)
             {
-               KategoriId = kategori.KategoriId,
-               TackKategori = kategori
-            };
-            return View(task);
+                kategoriModel = new TaskModel();
+                {
+                    kategoriModel.KategoriId = id;
+                }
+            }
+            else
+            {
+                kategoriModel = new TaskModel();
+                {
+                    kategoriModel.KategoriId = kategori.KategoriId;
+                    kategoriModel.TackKategori = kategori;
+                }
+            }
+            return View(kategoriModel);
         }
 
         
         [HttpPost]
-        public async Task<IActionResult> Create(TaskModel taskModel)
+        public async Task<IActionResult> CreateUpload(TaskModel taskModel)
         {
             _context.Add(taskModel);
             await _context.SaveChangesAsync();
@@ -80,9 +96,6 @@ namespace TaskManager.Controllers
             return View(taskModel);
         }
 
-        // POST: TaskModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TaskId,TaskName,TaskDeadline,TaskStatus,TaskImportance,KategoriId")] TaskModel taskModel)
@@ -118,6 +131,7 @@ namespace TaskManager.Controllers
         // GET: TaskModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+
             if (id == null || _context.TaskDb == null)
             {
                 return NotFound();
